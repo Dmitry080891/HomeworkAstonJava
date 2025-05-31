@@ -1,13 +1,21 @@
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseManager {
-    private static final String URL = "jdbc:postgresql://localhost:5432/address_book";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "postgres";
 
-    /** проверка наличия простгрес скл драйвера */
+    private Connection connection;
+
+    public DatabaseManager(Connection conn) throws SQLException {
+        this.connection = conn;
+    }
+    /** Проверка наличия простгрес скл драйвера */
     static {
         try {
             Class.forName("org.postgresql.Driver");
@@ -15,14 +23,7 @@ public class DatabaseManager {
             throw new RuntimeException("Ошибка загрузки PostgreSQL JDBC driver", e);
         }
     }
-    /** Подключение к простгрес скл
-     * URL — URL базы данных, к которой нужно подключиться.
-     * USER — имя пользователя базы данных.
-     * PASSWORD — пароль пользователя.  */
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
-    }
-
+    /** Подключение к простгрес скл*/
     /**  CRUD операции */
     /**  Создание контакта */
     public static void createContact(Contact contact) throws SQLException {
@@ -32,7 +33,7 @@ public class DatabaseManager {
  *
  PreparedStatement — это параметризованный шаблон SQL-команды.
  Во время каждого выполнения в него подставляются постоянные значения. */
-        try (Connection conn = getConnection();
+        try (Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/address_book", "postgres", "postgres");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, contact.getFirstName());
@@ -49,7 +50,7 @@ public class DatabaseManager {
         List<Contact> contacts = new ArrayList<>();
         String sql = "SELECT * FROM contacts ORDER BY last_name, first_name";
 
-        try (Connection conn = getConnection();
+        try (Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/address_book", "postgres", "postgres");
              Statement stmt = conn.createStatement();
              /** Полученные данные в виде таблици   */
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -72,7 +73,7 @@ public class DatabaseManager {
     public static Contact getContactById(int id) throws SQLException {
         String sql = "SELECT * FROM contacts WHERE id = ?";
 
-        try (Connection conn = getConnection();
+        try (Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/address_book", "postgres", "postgres");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
@@ -96,7 +97,7 @@ public class DatabaseManager {
     public static void updateContact(Contact contact) throws SQLException {
         String sql = "UPDATE contacts SET first_name = ?, last_name = ?, phone = ?, email = ?, address = ? WHERE id = ?";
 
-        try (Connection conn = getConnection();
+        try (Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/address_book", "postgres", "postgres");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, contact.getFirstName());
@@ -113,7 +114,7 @@ public class DatabaseManager {
     public static void deleteContact(int id) throws SQLException {
         String sql = "DELETE FROM contacts WHERE id = ?";
 
-        try (Connection conn = getConnection();
+        try (Connection conn = DriverManager.getConnection("jdbc:postgresql://localhost:5432/address_book", "postgres", "postgres");
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, id);

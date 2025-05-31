@@ -15,8 +15,6 @@ public class Service {
             System.out.println(contact);
         }
     }
-
-
     private static void addContact() throws Exception {
         System.out.println("Добавление нового контакта");
 

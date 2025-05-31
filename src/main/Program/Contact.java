@@ -1,5 +1,7 @@
 
-
+/** Класс записная книжка с полями
+ * (ID генерируется базой данных) имя, фамилия, номер телефона,
+ * электронная почта и адрес проживания */
 public class Contact {
     private int id;
     private String firstName;
@@ -8,7 +10,7 @@ public class Contact {
     private String email;
     private String address;
 
-
+    /** Конструктор со всеми параметрами */
     public Contact(int id, String firstName, String lastName, String phone, String email, String address) {
         this.id = id;
         this.firstName = firstName;
@@ -26,7 +28,7 @@ public class Contact {
         this.address = address;
     }
 
-
+    /** Геттеры и сетеры для получения и изменения данных из существующих полей */
     public int getId() {
         return id;
     }
@@ -74,7 +76,7 @@ public class Contact {
     public void setAddress(String address) {
         this.address = address;
     }
-
+    /** Метод как будут отображены данные о пользователе */
     @Override
     public String toString() {
         return "Contact{" +
