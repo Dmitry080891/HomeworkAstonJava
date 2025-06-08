@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <!-- Подключение к базе данных -->
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/address_book</property>
+        <property name="connection.username">postgres</property>
+        <property name="connection.password">postgres</property>
+
+        <!-- Установка пула соединений -->
+        <property name="connection.pool_size">5</property>
+
+        <!-- SQL диалект Постгрес -->
+        <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+        <!-- Преобразует весь выполненный SQL в стандартный вывод -->
+        <property name="show_sql">true</property>
+
+        <!-- Обновление базы данных при запуске -->
+        <property name="hbm2ddl.auto">update</property>
+
+        <!-- объект -->
+        <mapping class="com.example.AddressBook.entity.Contact"/>
+    </session-factory>
+</hibernate-configuration>
